@@ -6,6 +6,11 @@ import net.corda.core.contracts.requireSingleCommand
 import net.corda.core.transactions.LedgerTransaction
 
 class TokenContract: Contract {
+
+    companion object {
+        var ID = TokenContract::class.qualifiedName!!
+    }
+
     override fun verify(tx: LedgerTransaction) {
         val command = tx.commands.requireSingleCommand<CommandData>()
         when(command.value){

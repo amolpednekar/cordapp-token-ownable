@@ -7,7 +7,6 @@ import net.corda.core.identity.Party
 
 data class TokenState(
         val amount: Int,
-        val regulator: Party,
         override val owner: AbstractParty,
         override val participants: List<AbstractParty>): OwnableState {
 
