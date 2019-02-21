@@ -49,11 +49,21 @@ class TransferTokenTest{
         }
 
         userNode.transaction {
-            val queriedStates = userNode.services.vaultService.queryBy<TokenState>(QueryCriteria.VaultQueryCriteria(Vault.StateStatus.ALL))
+            val queriedStates = userNode.services.vaultService.queryBy<TokenState>(QueryCriteria.VaultQueryCriteria())
             print("Receiver node")
             for(states in queriedStates.states){
                print(states.state.data)
            }
+        }
+
+        userNode.startFlow(CombineTokensFlow())
+        network.runNetwork()
+        userNode.transaction {
+            val queriedStates = userNode.services.vaultService.queryBy<TokenState>(QueryCriteria.VaultQueryCriteria())
+            print("Receiver node after combine")
+            for(states in queriedStates.states){
+                print(states.state.data)
+            }
         }
 
     }

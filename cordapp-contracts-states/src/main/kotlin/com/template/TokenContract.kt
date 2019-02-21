@@ -17,7 +17,12 @@ class TokenContract: Contract {
             is Commands.Issue -> verifyIssue(tx, setOfSigners)
             is Commands.Transfer -> verifyTransfer(tx, setOfSigners)
             is Commands.Spend -> verifySpend(tx, setOfSigners)
+            is Commands.Combine -> verifyCombine(tx, setOfSigners)
         }
+    }
+
+    private fun verifyCombine(tx: LedgerTransaction, ofSigners: Set<PublicKey>) {
+
     }
 
     private fun verifyIssue(tx: LedgerTransaction, setOfSigners: Set<PublicKey>) {
@@ -63,5 +68,6 @@ class TokenContract: Contract {
         class Issue: Commands
         class Spend: Commands
         class Transfer: Commands
+        class Combine: Commands
     }
 }
