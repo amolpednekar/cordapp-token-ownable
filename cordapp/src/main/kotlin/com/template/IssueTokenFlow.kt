@@ -5,13 +5,12 @@ import net.corda.core.flows.FinalityFlow
 import net.corda.core.flows.FlowLogic
 import net.corda.core.flows.InitiatingFlow
 import net.corda.core.flows.StartableByRPC
-import net.corda.core.identity.Party
 import net.corda.core.transactions.SignedTransaction
 import net.corda.core.transactions.TransactionBuilder
 
 @InitiatingFlow
 @StartableByRPC
-class IssueTokenFlow(val amount: Int):FlowLogic<SignedTransaction>(){
+class IssueTokenFlow(private val amount: Int):FlowLogic<SignedTransaction>(){
 
     @Suspendable
     override fun call(): SignedTransaction {

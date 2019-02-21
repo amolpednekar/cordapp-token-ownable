@@ -50,7 +50,7 @@ class TokenContract: Contract {
 //            "Request for issuance must be signed by the owner and receiver" using(setOfSigners.containsAll(listOf(input.owner.owningKey, output.owner.owningKey)) && setOfSigners.size == 2)
 //            "Token owner & receiver must be added to the list of participants when requesting issuance of a token on the ledger" using(output.participants.containsAll(listOf(input.owner, output.owner)) && output.participants.size == 2)
             "Issuer must have sufficient balance to transfer amount" using (outputOfIssuer.amount > 0)
-            "Total amount of outputs must match input" using (outputOfIssuer.amount + outputOfReceiver.amount == input.amount)
+//            "Total amount of outputs must match input" using (outputOfIssuer.amount + outputOfReceiver.amount == input.amount)
         }
     }
 
