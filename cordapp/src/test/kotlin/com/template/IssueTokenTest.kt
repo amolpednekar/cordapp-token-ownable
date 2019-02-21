@@ -9,7 +9,7 @@ import org.junit.Test
 class IssueTokenTest {
     private val network = MockNetwork(listOf("com.template"))
     private val tokenIssuerNode = network.createPartyNode()
-    private val userNode = network.createPartyNode()
+    private val receiverNode = network.createPartyNode()
 
 
     @Before
@@ -24,12 +24,13 @@ class IssueTokenTest {
         tokenIssuerNode.startFlow(issueTokenFlow).toCompletableFuture()
         network.runNetwork()
         tokenIssuerNode.transaction {
-            val queriedStates = tokenIssuerNode.services.vaultService.queryBy<TokenState>()
-            print(queriedStates.states.first().state.data)
+            val queriedStates = tokenIssuerNode.services.vaultService.queryBy<TokenState>().states
+            assert(queriedStates.size == 1)
+            assert(queriedStates.first().state.data.amount == 100)
         }
-        userNode.transaction {
-            val queriedStates = userNode.services.vaultService.queryBy<TokenState>()
-            assert(queriedStates.states.isEmpty())
+        receiverNode.transaction {
+            val queriedStates = receiverNode.services.vaultService.queryBy<TokenState>().states
+            assert(queriedStates.isEmpty())
         }
     }
 }

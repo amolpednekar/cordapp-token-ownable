@@ -45,8 +45,8 @@ class TransferTokenResponderFlow(val otherPartySession: FlowSession): FlowLogic<
     @Suspendable
     override fun call() {
         subFlow(object: SignTransactionFlow(otherPartySession){
-                override fun checkTransaction(stx: SignedTransaction) {
-                    // sanity checks on this transaction
-        }})
+            override fun checkTransaction(stx: SignedTransaction) {
+                // sanity checks on this transaction
+            }})
     }
 }
