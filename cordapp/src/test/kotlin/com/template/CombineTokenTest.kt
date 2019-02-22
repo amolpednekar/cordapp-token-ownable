@@ -6,7 +6,6 @@ import net.corda.testing.node.MockNetwork
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
-import kotlin.test.assert
 
 class CombineTokenTest{
     private val network = MockNetwork(listOf("com.template"))
@@ -39,9 +38,6 @@ class CombineTokenTest{
         network.runNetwork()
         receiverNode.transaction {
             val queriedStates = receiverNode.services.vaultService.queryBy<TokenState>(QueryCriteria.VaultQueryCriteria()).states
-            for(states in queriedStates){
-                print(states.state.data)
-            }
             assert(queriedStates.first().state.data.amount == amountToIssue + amountToTransfer )
         }
     }

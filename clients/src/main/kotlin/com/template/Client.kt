@@ -18,16 +18,33 @@ private class Client {
 
     fun main(args: Array<String>) {
         // Create an RPC connection to the node.
-        require(args.size == 3) { "Usage: Client <node address> <rpc username> <rpc password>" }
-        val nodeAddress = parse(args[0])
-        val rpcUsername = args[1]
-        val rpcPassword = args[2]
-        val client = CordaRPCClient(nodeAddress)
-        val proxy = client.start(rpcUsername, rpcPassword).proxy
+        require(args.size == 2) { "Usage: Client <node address> <rpc username> <rpc password>" }
 
-        // Interact with the node.
-        // For example, here we print the nodes on the network.
-        val nodes = proxy.networkMapSnapshot()
-        logger.info("{}", nodes)
+        // Create a connection to PartyA and PartyB.
+        val (issuerProxy, receiverProxy) = args.map { arg ->
+            val nodeAddress = parse(arg)
+            val client = CordaRPCClient(nodeAddress)
+            client.start("user1", "test").proxy
+        }
+
+        val receiverIdentity = receiverProxy.nodeInfo().legalIdentities.first()
+
+        issuerProxy.startFlowDynamic(IssueTokenFlow::class.java, 200)
+        println("Started IssueTokenFlow, issuing 200 tokens.\nWaiting 5 seconds")
+        Thread.sleep(5000)
+        println("Issuer's vault " + issuerProxy.vaultQuery(TokenState::class.java).states)
+
+        issuerProxy.startFlowDynamic(TransferTokenFlow::class.java, receiverIdentity, 100)
+        Thread.sleep(5000)
+        issuerProxy.startFlowDynamic(TransferTokenFlow::class.java, receiverIdentity, 50)
+        println("Started TransferTokenFlow, transferring 100 and 50 tokens to receiver.\nWaiting 5 seconds")
+        Thread.sleep(5000)
+        println("Issuer's vault " + issuerProxy.vaultQuery(TokenState::class.java).states)
+        println("Receiver's vault " + receiverProxy.vaultQuery(TokenState::class.java).states)
+
+        receiverProxy.startFlowDynamic(CombineTokensFlow::class.java)
+        println("Started CombineTokensFlow, combining all of receiver's tokens.\nWaiting 5 seconds")
+        Thread.sleep(5000)
+        println("Receiver's vault " + receiverProxy.vaultQuery(TokenState::class.java).states)
     }
 }

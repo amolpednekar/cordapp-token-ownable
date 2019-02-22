@@ -7,6 +7,7 @@ import net.corda.core.node.services.queryBy
 import net.corda.core.transactions.SignedTransaction
 import net.corda.core.transactions.TransactionBuilder
 
+@StartableByRPC
 @InitiatingFlow
 class TransferTokenFlow(private val receiver: Party,
                         private val amountToTransfer: Int):FlowLogic<SignedTransaction>(){
