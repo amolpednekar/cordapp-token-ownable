@@ -24,7 +24,32 @@ Run the following command from the project's root folder:
 This will run the CorDapp client defined [HERE](clients/src/main/kotlin/com/template/Client.kt). This client will:
 
 1. Issuer node issues 200 tokens to receiver node.
+```
+Issuer's vault
 
+[StateAndRef(state=TransactionState(data=TokenState(amount=200, owner=O=PartyA, L=London, C=GB, participants=[O=PartyA, L=London, C=GB]), contract=com.template.TokenContract, notary=O=Notary Service, L=Zurich, C=CH, ...]
+```
+
+2. Issuers transfer token amounts of 100 and 50 to receiver, which creates 2 entries in receiver's node
+```
+Issuer's vault
+
+[StateAndRef(state=TransactionState(data=TokenState(amount=50, owner=O=PartyA, L=London, C=GB, participants=[O=PartyA, L=London, C=GB]), contract=com.template.TokenContract, notary=O=Notary Service, L=Zurich, C=CH, ... ]
+```
+```
+Receiver's vault 
+
+[StateAndRef(state=TransactionState(data=TokenState(amount=100, owner=O=PartyB, L=New York, C=US, participants=[O=PartyB, L=New York, C=US]), contract=com.template.TokenContract, notary=O=Notary Service, L=Zurich, C=CH .. ), 
+
+StateAndRef(state=TransactionState(data=TokenState(amount=50, owner=O=PartyB, L=New York, C=US, participants=[O=PartyB, L=New York, C=US]), contract=com.template.TokenContract, notary=O=Notary Service, L=Zurich, C=CH ... ]
+```
+
+3. Receiver combines all Token inputs into a single token
+```
+Receiver's vault
+
+[StateAndRef(state=TransactionState(data=TokenState(amount=150, owner=O=PartyB, L=New York, C=US, participants=[O=PartyB, L=New York, C=US]), contract=com.template.TokenContract, notary=O=Notary Service, L=Zurich, C=CH, ...]
+```
 
 ## Running the nodes
 
