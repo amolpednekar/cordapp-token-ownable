@@ -18,8 +18,8 @@ See https://docs.corda.net/getting-set-up.html.
 # Usage
 Run the following command from the project's root folder:
 
-* Unix/Mac OSX: `./gradlew runUpgradeContractStateClient`
-* Windows: `gradlew runUpgradeContractStateClient`
+* Unix/Mac OSX: `./gradlew runClient`
+* Windows: `gradlew runClient`
 
 This will run the CorDapp client defined [HERE](clients/src/main/kotlin/com/template/Client.kt). This client will:
 

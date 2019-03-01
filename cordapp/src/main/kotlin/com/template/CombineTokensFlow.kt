@@ -19,11 +19,12 @@ class CombineTokensFlow: FlowLogic<SignedTransaction>() {
         val myTokens = serviceHub.vaultService.queryBy<TokenState>(QueryCriteria.VaultQueryCriteria(Vault.StateStatus.UNCONSUMED)).states
         var totalAmount = 0
 
-        for(states in myTokens){
-            transactionBuilder.addInputState(states)
-            totalAmount += states.state.data.amount
+        if(!myTokens.isEmpty()){  // Combine only if there are more than 0 token states
+            for(states in myTokens){
+                transactionBuilder.addInputState(states)
+                totalAmount += states.state.data.amount
+            }
         }
-        print(totalAmount)
 
         val outputState = TokenState(totalAmount, ourIdentity, listOf(ourIdentity))
 

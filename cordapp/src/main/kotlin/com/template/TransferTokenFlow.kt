@@ -16,6 +16,9 @@ class TransferTokenFlow(private val receiver: Party,
     override fun call(): SignedTransaction {
         val notary = serviceHub.networkMapCache.notaryIdentities.first()
 
+        // Try to combine existing tokens before transferring to receiver
+        subFlow(CombineTokensFlow())
+
         val inputTokenStateReference = serviceHub.vaultService.queryBy<TokenState>().states.first()
         val inputTokenState = inputTokenStateReference.state.data
 

@@ -11,7 +11,7 @@ import net.corda.core.utilities.loggerFor
  */
 fun main(args: Array<String>) = Client().main(args)
 
-private class Client {
+public class Client {
     companion object {
         val logger = loggerFor<Client>()
     }
@@ -38,7 +38,7 @@ private class Client {
         Thread.sleep(5000)
         issuerProxy.startFlowDynamic(TransferTokenFlow::class.java, receiverIdentity, 50)
         println("Started TransferTokenFlow, transferring 100 and 50 tokens to receiver.\nWaiting 5 seconds")
-        Thread.sleep(5000)
+        Thread.sleep(10000)
         println("Issuer's vault " + issuerProxy.vaultQuery(TokenState::class.java).states)
         println("Receiver's vault " + receiverProxy.vaultQuery(TokenState::class.java).states)
 
