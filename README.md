@@ -54,3 +54,8 @@ Receiver's vault
 ## Running the nodes
 
 See https://docs.corda.net/tutorial-cordapp.html#running-the-example-cordapp.
+
+## TODO
+
+* Add Flow/State/Tests to 'Spend' tokens
+* Add contract checks for 'Combine' command

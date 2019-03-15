@@ -16,13 +16,8 @@ class TokenContract: Contract {
         when(commands.value){
             is Commands.Issue -> verifyIssue(tx, setOfSigners)
             is Commands.Transfer -> verifyTransfer(tx, setOfSigners)
-            is Commands.Spend -> verifySpend(tx, setOfSigners)
             is Commands.Combine -> verifyCombine(tx, setOfSigners)
         }
-    }
-
-    private fun verifyCombine(tx: LedgerTransaction, ofSigners: Set<PublicKey>) {
-
     }
 
     private fun verifyIssue(tx: LedgerTransaction, setOfSigners: Set<PublicKey>) {
@@ -37,14 +32,16 @@ class TokenContract: Contract {
 
     private fun verifyTransfer(tx: LedgerTransaction, setOfSigners: Set<PublicKey>) {
         requireThat {
-            "There are is one input" using (tx.inputs.size == 1)
-            "There are two output" using (tx.outputs.size == 2)
+
+            // Check that there is only one input
             val input = tx.inputsOfType<TokenState>().single()
+            "There are two outputs" using (tx.outputs.size == 2)
             val outputs = tx.outputsOfType<TokenState>()
 
             val outputOfIssuer: TokenState
             val outputOfReceiver: TokenState
 
+            // Check which of the two output states belong to issuer and receiver
             if(outputs[0].owner == input.owner) {
                 outputOfIssuer = outputs[0]
                 outputOfReceiver = outputs[1]
@@ -52,21 +49,18 @@ class TokenContract: Contract {
                 outputOfIssuer = outputs[1]
                 outputOfReceiver = outputs[0]
             }
-//            "Request for issuance must be signed by the owner and receiver" using(setOfSigners.containsAll(listOf(input.owner.owningKey, output.owner.owningKey)) && setOfSigners.size == 2)
-//            "Token owner & receiver must be added to the list of participants when requesting issuance of a token on the ledger" using(output.participants.containsAll(listOf(input.owner, output.owner)) && output.participants.size == 2)
+
             "Issuer must have sufficient balance to transfer amount" using (outputOfIssuer.amount > 0)
             "Total amount of outputs must match input" using (outputOfIssuer.amount + outputOfReceiver.amount == input.amount)
         }
     }
 
-    private fun verifySpend(tx: LedgerTransaction, setOfSigners: Set<PublicKey>) {
-
+    private fun verifyCombine(tx: LedgerTransaction, ofSigners: Set<PublicKey>) {
+        TODO()
     }
-
 
     interface Commands: CommandData{
         class Issue: Commands
-        class Spend: Commands
         class Transfer: Commands
         class Combine: Commands
     }
