@@ -56,7 +56,7 @@ class TokenContract: Contract {
     }
 
     private fun verifyCombine(tx: LedgerTransaction, ofSigners: Set<PublicKey>) {
-        TODO()
+        //  accept all right now - Add checks TBD!
     }
 
     interface Commands: CommandData{
