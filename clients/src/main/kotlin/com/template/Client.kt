@@ -29,22 +29,19 @@ public class Client {
 
         val receiverIdentity = receiverProxy.nodeInfo().legalIdentities.first()
 
-        issuerProxy.startFlowDynamic(IssueTokenFlow::class.java, 200)
-        println("Started IssueTokenFlow, issuing 200 tokens.\nWaiting 5 seconds")
-        Thread.sleep(5000)
-        println("Issuer's vault " + issuerProxy.vaultQuery(TokenState::class.java).states)
+        println("\n\nStarted IssueTokenFlow, issuing 200 tokens.")
+        issuerProxy.startFlowDynamic(IssueTokenFlow::class.java, 200).returnValue.toCompletableFuture().get()
+        println("\n\nIssuer's vault " + issuerProxy.vaultQuery(TokenState::class.java).states)
 
-        issuerProxy.startFlowDynamic(TransferTokenFlow::class.java, receiverIdentity, 100)
-        Thread.sleep(5000)
-        issuerProxy.startFlowDynamic(TransferTokenFlow::class.java, receiverIdentity, 50)
-        println("Started TransferTokenFlow, transferring 100 and 50 tokens to receiver.\nWaiting 5 seconds")
-        Thread.sleep(10000)
-        println("Issuer's vault " + issuerProxy.vaultQuery(TokenState::class.java).states)
-        println("Receiver's vault " + receiverProxy.vaultQuery(TokenState::class.java).states)
+        println("\n\nStarted TransferTokenFlow, transferring 100 and 50 tokens to receiver")
+        issuerProxy.startFlowDynamic(TransferTokenFlow::class.java, receiverIdentity, 100).returnValue.toCompletableFuture().get();
+        issuerProxy.startFlowDynamic(TransferTokenFlow::class.java, receiverIdentity, 50).returnValue.toCompletableFuture().get();
 
-        receiverProxy.startFlowDynamic(CombineTokensFlow::class.java)
-        println("Started CombineTokensFlow, combining all of receiver's tokens.\nWaiting 5 seconds")
-        Thread.sleep(5000)
-        println("Receiver's vault " + receiverProxy.vaultQuery(TokenState::class.java).states)
+        println("\n\nIssuer's vault " + issuerProxy.vaultQuery(TokenState::class.java).states)
+        println("\n\nReceiver's vault " + receiverProxy.vaultQuery(TokenState::class.java).states)
+
+        println("\n\nStarted CombineTokensFlow, combining all of receiver's tokens.")
+        receiverProxy.startFlowDynamic(CombineTokensFlow::class.java).returnValue.toCompletableFuture().get();
+        println("\n\nReceiver's vault " + receiverProxy.vaultQuery(TokenState::class.java).states)
     }
 }
